@@ -1,0 +1,13 @@
+﻿@page "/Cantons/Update/{CantonId}"
+
+<UpdateCantonComponent CantonId="@CantonId" />
+
+@code {
+    [Parameter]
+    public string CantonId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        CantonId = CantonId;
+    }
+}

@@ -1,0 +1,66 @@
+﻿@using Common.ViewModels
+@using Business.Cantons
+
+@inject RouterCanton router;
+@inject NavigationManager NavManager
+
+
+<span class="col-12 h4 text-center font-weight-bolder mt-5 mb-5">
+    Actualizar canton
+</span>
+<span class="col-12 text-danger text-center h5">@message</span>
+<EditForm class="col-4 p-2" OnValidSubmit="@Save" Model="@oCanton">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="name" class="font-weight-bolder">Nombre:</label>
+        <InputText id="name" @bind-Value="oCanton.Name" class="form-control" />
+        <ValidationMessage For="@(() => oCanton.Name)" class="text-danger" />
+    </div>
+    <div class="form-group justify-content-center d-flex flex-wrap">
+        <input type="submit" value="Actualizar" class="form-control btn btn-dark" />
+        <a href="Cantons/Index" class="btn btn-outline-secondary m-3">Volver</a>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public string CantonId { get; set; }
+    CantonVM oCanton = new CantonVM();
+    public string message;
+
+    protected override void OnInitialized()
+    {
+        var response = router.Get(Int32.Parse(CantonId));
+
+        if(!response.IsSuccess)
+        {
+            message = response.Message;
+        }
+        else
+        {
+            oCanton = response.Data;
+        }
+    }
+
+    private void Save()
+    {
+        try
+        {
+            var response = router.Update(oCanton);
+            if (!response.IsSuccess)
+            {
+                message = response.Message;
+            }
+            else
+            {
+                NavManager.NavigateTo("Cantons/Index");
+            }
+        }
+        catch (Exception e)
+        {
+
+            message = e.InnerException.Message;
+        }
+    }
+
+}

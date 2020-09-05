@@ -1,0 +1,13 @@
+﻿@page "/Cantons/Delete/{CantonId}"
+
+<DeleteCantonComponent CantonId="@CantonId" />
+
+@code {
+    [Parameter]
+    public string CantonId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        CantonId = CantonId;
+    }
+}

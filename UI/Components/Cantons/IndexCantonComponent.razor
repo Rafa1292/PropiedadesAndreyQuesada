@@ -1,0 +1,52 @@
+﻿@using Business.Cantons
+@using Common.ViewModels
+
+@inject RouterCanton router
+
+<span class="col-12 h4 text-center font-weight-bolder mt-5 mb-5">
+    Cantones
+</span>
+<p class="col-12 p-1 d-flex justify-content-center">
+    <a class="btn btn-primary " href="Cantons/Create">Agregar canton</a>
+</p>
+<label class="text-danger h5 ">@message</label>
+
+<div class="col-12 p-0 d-flex flex-wrap justify-content-center">
+    <table id="categoriesTable" class="display col-6 table text-center table-hover">
+
+        <tbody>
+            @foreach (var canton in cantons)
+            {
+                <tr>
+                    <td>@canton.Name</td>
+                    <td>
+                        <a class="btn btn-secondary" href="Cantons/Update/@canton.CantonId">Editar</a>
+                        <a class="btn btn-outline-danger" href="Cantons/Delete/@canton.CantonId">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
+@code 
+{
+    private string message;
+    private List<CantonVM> cantons = new List<CantonVM>();
+
+    protected override void OnInitialized()
+    {
+        var response = router.GetAll();
+        if (!response.IsSuccess)
+        {
+            message = response.Message;
+        }
+        else
+        {
+            cantons = response.Data;
+        }
+    }
+}

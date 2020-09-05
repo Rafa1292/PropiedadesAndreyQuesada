@@ -1,0 +1,64 @@
+﻿@using Common.ViewModels
+@using Business.Cantons
+
+@inject RouterCanton router;
+@inject NavigationManager NavManager
+
+
+<span class="col-12 h4 text-center font-weight-bolder mt-5 mb-5">
+    Eliminar canton
+</span>
+<span class="col-12 text-danger text-center h5">@message</span>
+
+<label class="col-12 text-center">¿Seguro que deseas eliminar este canton?</label>
+<h5 class="col-12 mb-4 text-center">
+    <strong>
+        @oCanton.Name
+    </strong>
+</h5>
+<div class="form-group justify-content-center d-flex flex-wrap">
+    <input type="button" value="Eliminar" @onclick="Delete" class="form-control btn btn-danger col-12" />
+    <a href="Cantons/Index" class="btn btn-outline-secondary m-3">Volver</a>
+</div>
+
+@code {
+    [Parameter] public string CantonId { get; set; }
+    CantonVM oCanton = new CantonVM();
+    public string message;
+
+    protected override void OnInitialized()
+    {
+        var response = router.Get(Int32.Parse(CantonId));
+
+        if (!response.IsSuccess)
+        {
+            message = response.Message;
+        }
+        else
+        {
+            oCanton = response.Data;
+        }
+    }
+
+    private void Delete()
+    {
+        try
+        {
+            var response = router.Delete(oCanton.CantonId);
+            if (!response.IsSuccess)
+            {
+                message = response.Message;
+            }
+            else
+            {
+                NavManager.NavigateTo("Cantons/Index");
+            }
+        }
+        catch (Exception e)
+        {
+
+            message = e.InnerException.Message;
+        }
+    }
+
+}
